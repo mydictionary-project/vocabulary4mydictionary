@@ -20,6 +20,7 @@ type VocabularyAnswerStruct struct {
 	SerialNumber int      `json:"serialNumber"` // `xlsx:sn`
 	QueryCounter int      `json:"queryCounter"` // `xlsx:qc`
 	QueryTime    string   `json:"queryTime"`    // `xlsx:qt`
+	Note         []string `json:"note"`         // `xlsx:nt`
 	SourceName   string   `json:"sourceName"`
 	Type         int      `json:"type"`
 	Status       string   `json:"status"`

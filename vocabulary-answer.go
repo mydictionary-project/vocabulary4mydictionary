@@ -1,15 +1,15 @@
 package vocabulary4mydictionary
 
 const (
-	// Collection : int for "Type"
+	// Collection : int for "Type" in VocabularyAnswerStruct and "TableType" in VocabularyEditStruct
 	Collection = 1
-	// Dictionary : int for "Type"
+	// Dictionary : int for "Type" in VocabularyAnswerStruct and "TableType" in VocabularyEditStruct
 	Dictionary = 2
-	// Online : int for "Type"
+	// Online : int for "Type" in VocabularyAnswerStruct
 	Online = 3
-	// Basic : string for "Status"
+	// Basic : string for "Status" in VocabularyAnswerStruct
 	Basic = "basic"
-	// Advance : string for "Status"
+	// Advance : string for "Status" in VocabularyAnswerStruct
 	Advance = "advance"
 )
 
@@ -24,4 +24,8 @@ type VocabularyAnswerStruct struct {
 	SourceName   string   `json:"sourceName"`
 	Type         int      `json:"type"`
 	Status       string   `json:"status"`
+	Location     struct {
+		TableIndex int `json:"tableIndex"`
+		ItemIndex  int `json:"itemIndex"`
+	} `json:"location"`
 }

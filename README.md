@@ -1,30 +1,30 @@
 # Vocabulary for MYDICTIONARY
 
+[简体中文版](./README.zh-Hans.md)
+
 ### 1. Introduction
 
-The repository defines some basic data structures of [MYDICTIONARY](https://github.com/zzc-tongji/mydictionary).
+The repository defines some basic data structures of [MYDICTIONARY](https://github.com/zzc-tongji/mydictionary) ("the core library" for short).
 
 ### 2. Query
 
-Methods of query should be explained first before discussing data structures.
-
-Take "animal.xlsx" as an example.
+Take file `animal.xlsx` as an example.
 
 ![animal](./README.picture/animal.png)
 
-#### 2.1. Basic Query
+#### 2.1. Basic Query (Exact Match)
 
-If the word **is exactly the same as the content in cell at column "Word" in a line**, the line will be selected.
+If the word **is exactly the same as the content in cell at column "Word" in a line**, data of the line will be selected.
 
-In basic query, input word "cat" to file "animal.xlsx", and then, the line 1 will be selected.
+For example, in *basic query*, input word "cat" and data of the line 1 will be selected.
 
-#### 2.2. Advanced Query
+#### 2.2. Advanced Query (Keyword Match)
 
 If the word **is contained by the content in cells at columns "Word", "Define" or "Note" in a line**, the line will be selected.
 
-In advanced query, input word "e" to "animal.xlsx", and then, the line 1, 3 and 5 will be selected.
+For example, in *advanced query*, input word "e" and the data of line 1, 3 and 5 will be selected.
 
-### 3. Ask
+### 3. VocabularyAskStruct
 
 ```go
 type VocabularyAskStruct struct {
@@ -35,25 +35,29 @@ type VocabularyAskStruct struct {
 }
 ```
 
-This structure indicates the word and the method for query.
+This structure indicates the word and options of query.
 
-#### 3.1. Advance
+#### 3.1. Word
 
-If `Advance` is `false`, the library will do *basic query* of `Word` only.
+`Word` indicates the word of query.
 
-If `Advance` is `true`, the library will do both *basic query* and *advanced query* of `Word`.
+#### 3.2. Advance
 
-#### 3.2. Online
+If `Advance` is `false`, the core library will do *basic query* of `Word` only.
 
-If `Online` is `true`, the library will know that users need query `Word` online.
+If `Advance` is `true`, the core library will do both *basic query* and *advanced query* of `Word`.
 
-This doesn't ensure that the library will query `Word` online. Whether the library does also depends on `online.mode` in *configuration* (at [here](https://github.com/zzc-tongji/mydictionary#2431-mode)).
+#### 3.3. Online
 
-#### 3.3. DoNotRecord
+If `Online` is `true`, the core library will know that users need query `Word` online.
 
-If `DoNotRecord` is `true`, the library will not *record* the *vocabulary* of `Word` to any *collections* and *dictionaries*.
+**Note that it doesn't ensure that the core library will query `Word` online.** Whether the core library does also depends on `online.mode` in *configuration* (at [here](https://github.com/zzc-tongji/mydictionary#2431-mode)).
 
-### 4. Answer
+#### 3.4. DoNotRecord
+
+If `DoNotRecord` is `true`, the core library will not *record* the *vocabulary* to any *collections* and *dictionaries*.
+
+### 4. VocabularyAnswerStruct
 
 ```go
 type VocabularyAnswerStruct struct {
@@ -83,46 +87,67 @@ const (
 
 This is the data structure of the *vocabulary*.
 
-#### 4.1. SourceName
+#### 4.1. Word
+
+`Word` indicates the word in the *vocabulary*.
+
+#### 4.2. Define
+
+`Define` indicates definitions in the *vocabulary*.
+
+#### 4.3. SerialNumber
+
+`SerialNumber` indicates the serial number of the *vocabulary*.
+
+#### 4.4. QueryCounter
+
+`QueryCounter` indicates the query counter of the *vocabulary*.
+
+#### 4.5. Note
+
+`Note` indicates notes in the *vocabulary*.
+
+#### 4.6. QueryTime
+
+`QueryTime` indicates the last query time of the *vocabulary*.
+
+#### 4.7. SourceName
 
 `SourceName` indicates where the *vocabulary* comes from. It can be the name of:
 
 - the *collection*
-
-
 - the *dictionary*
 - the *service*
 
-#### 4.2. Type
+#### 4.8. Type
 
-- If the vocabulary comes from the *collection*, its `type` will be `Collection`.
-- If the vocabulary comes from the *dictionary*, its `type` will be `Dictionary`.
-- If the vocabulary comes from the *service*, its `type` will be `Online`.
+- If the *vocabulary* comes from the *collection*, its `Type` will be `Collection`.
+- If the *vocabulary* comes from the *dictionary*, its `Type` will be `Dictionary`.
+- If the *vocabulary* comes from the *service*, its `Type` will be `Online`.
 
-#### 4.3. Status
+#### 4.9. Status
 
 `Status` indicates some other information.
 
 If the *vocabulary* comes from the *collection* or the *dictionary*:
 
-- If the *vocabulary* is in the *collection* and the *dictionary*, its `Status` will be `""`.
 - If the *vocabulary* comes from *basic query*, its `Status` will be `Basic`.
 - If the *vocabulary* comes from *advanced query*, its `Status` will be `Advance`.
 
 If the *vocabulary* comes from the *service*, its `Status` will be `Basic`.
 
-#### 4.4. Location
+#### 4.10. Location
 
-`Location` indicates the *vocabulary's* location. It is a structure and has got these members:
+`Location` is used to locate the *vocabulary* in *collections* or *dictionaries*.
 
-- Integer `TableIndex`: it indicates the list of *collection* or *dictionary* (depends on `Type`) which the *vocabulary* belongs to.
-- Integer `ItemIndex`: it indicates the *vocabulary's* index in the *collection* or the *dictionary*.
+It is a structure and has got these members:
+
+- `TableIndex` indicates the index of the *collection* or the *dictionary* (depends on `Type`) which the *vocabulary* belongs to in the list.
+- `ItemIndex` indicates the *vocabulary's* index in the *collection* or the *dictionary*.
 
 **These indexes begin with 0.**
 
-`Location` can be used to modify contents of *collections* and *dictionaries*.
-
-### 5. Edit
+### 5. VocabularyEditStruct
 
 ```go
 type VocabularyEditStruct struct {
@@ -141,15 +166,15 @@ const (
 )
 ```
 
-This structure is used to edit a *vocabulary* in *collection* or *dictionary*.
+This structure is used to provide information for editting a *vocabulary* in *collection* or *dictionary*.
 
 #### 5.1. TableType
 
-`TableType` is same as `Type` in #4.2.
+`TableType` is same as `Type` in \#4.8.
 
 #### 5.2. Location
 
-`Location` is same as #4.4.
+`Location` is same as \#4.10.
 
 #### 5.3. ContentType
 
@@ -158,10 +183,11 @@ This structure is used to edit a *vocabulary* in *collection* or *dictionary*.
 
 #### 5.4. Content
 
-`Content` is the value of editing.
+`Content` is the new string to be set.
 
 ### 6. Others
 
+- All code files are edited by [Atom](https://atom.io/).
 - All ".md" files are edited by [Typora](http://typora.io).
 - The style of all ".md" files is [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown).
 - There is a LF (Linux) at the end of each line.

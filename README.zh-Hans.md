@@ -60,29 +60,31 @@ type VocabularyAskStruct struct {
 ### 4. VocabularyAnswerStruct
 
 ```go
-type VocabularyAnswerStruct struct {
-	Word         string   `json:"word"`         // `xlsx:wd`
-	Define       []string `json:"define"`       // `xlsx:def`
-	SerialNumber int      `json:"serialNumber"` // `xlsx:sn`
-	QueryCounter int      `json:"queryCounter"` // `xlsx:qc`
-	QueryTime    string   `json:"queryTime"`    // `xlsx:qt`
-	Note         []string `json:"note"`         // `xlsx:nt`
-	SourceName   string   `json:"sourceName"`
-	Type         int      `json:"type"`
-	Status       string   `json:"status"`
-	Location     struct {
-		TableIndex int `json:"tableIndex"`
-		ItemIndex  int `json:"itemIndex"`
-	} `json:"location"`
-}
-
 const (
+	Basic = "basic"
+	Advance = "advance"
 	Collection = 1
 	Dictionary = 2
 	Online = 3
-	Basic = "basic"
-	Advance = "advance"
 )
+
+type VocabularyAnswerStruct struct {
+	Word         string         `json:"word"`         // `xlsx:wd`
+	Definition   []string       `json:"definition"`   // `xlsx:def`
+	SerialNumber int            `json:"serialNumber"` // `xlsx:sn`
+	QueryCounter int            `json:"queryCounter"` // `xlsx:qc`
+	QueryTime    string         `json:"queryTime"`    // `xlsx:qt`
+	Note         []string       `json:"note"`         // `xlsx:nt`
+	SourceName   string         `json:"sourceName"`
+	Status       string         `json:"status"`
+	Location     LocationStruct `json:"location"`
+}
+
+type LocationStruct struct {
+	TableType  int `json:"tableType"`
+	TableIndex int `json:"tableIndex"`
+	ItemIndex  int `json:"itemIndex"`
+}
 ```
 
 这是*词条*的数据结构。
@@ -91,9 +93,9 @@ const (
 
 `Word`指示了*词条*中的词汇。
 
-#### 4.2. Define
+#### 4.2. Definition
 
-`Define`指示了*词条*中的释义。
+`Definition`指示了*词条*中的释义。
 
 #### 4.3. SerialNumber
 
@@ -119,13 +121,7 @@ const (
 - *离线词典*
 - *在线服务*
 
-#### 4.8. Type
-
-- 如果*词条*来源于*生词本*，那么它的`Type`为`Collection`。
-- 如果*词条*来源于*离线词典*，那么它的`Type`为`Dictionary`。
-- 如果*词条*来源于*在线服务*，那么它的`Type`为`Online`。
-
-#### 4.9. Status
+#### 4.8. Status
 
 `Status`指示了一些其他的信息。
 
@@ -136,13 +132,17 @@ const (
 
 如果*词条*来源于*在线服务*，那么它的`Status`为`Basic`。
 
-#### 4.10. Location
+#### 4.9. Location
 
 `Location`用于定位*词条*在*生词本*或*在线词典*中的位置。
 
 它是一个结构体，包含下列成员：
 
-- `TableIndex`指出了*词条*所属的*生词本*或*在线词典*（取决于`Type`）在列表中的索引。
+- `TableType`指出了*词条*的来源。
+  - 如果*词条*来源于*生词本*，那么该成员为`Collection`。
+  - 如果*词条*来源于*离线词典*，那么该成员为`Dictionary`。
+  - 如果*词条*来源于*在线服务*，那么该成员为`Online`。
+- `TableIndex`指出了*词条*所属的*生词本*或*在线词典*（取决于`TableType`）在列表中的索引。
 - `ItemIndex`指出了*词条*在*生词本*或*在线词典*中的索引。
 
 **上述索引从0开始。**
@@ -151,39 +151,25 @@ const (
 
 ```go
 type VocabularyEditStruct struct {
-	TableType int `json:"tableType"`
-	Location  struct {
-		TableIndex int `json:"tableIndex"`
-		ItemIndex  int `json:"itemIndex"`
-	} `json:"location"`
-	ContentType int    `json:"contentType"`
-	Content     string `json:"content"`
+	Location   LocationStruct `json:"location"`
+	Definition string         `json:"definition"`
+	Note       string         `json:"note"`
 }
-
-const (
-	Define = -1
-	Note = -2
-)
 ```
 
 这个结构体给出一些信息，以便编辑*生词本*或*离线词典*中*词条*。
 
-#### 5.1. TableType
+#### 5.1. Location
 
-`TableType`与\#4.8中的`Type`相同。
+`Location`与\#4.9中的相同。
 
-#### 5.2. Location
+#### 5.2. Definition
 
-`Location`与\#4.10中的相同。
+`Definition`指示了修改后的释义。
 
-#### 5.3. ContentType
+#### 5.3. Note
 
-- 将`ContentType`设定为`Define`，以编辑*词条*的`Define`。
-- 将`ContentType`设定为`Note`，以编辑*词条*的`Note`。
-
-#### 5.4. Content
-
-`Content`是需要被设定的新字符串。
+`Note`指示了修改后的笔记。
 
 ### 6. 其他
 

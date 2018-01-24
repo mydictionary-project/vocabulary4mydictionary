@@ -39,7 +39,7 @@ This structure indicates the word and options of query.
 
 #### 3.1. Word
 
-`Word` indicates the word of query.
+`Word` indicates the word for query.
 
 #### 3.2. Advance
 
@@ -60,29 +60,31 @@ If `DoNotRecord` is `true`, the core library will not *record* the *vocabulary* 
 ### 4. VocabularyAnswerStruct
 
 ```go
-type VocabularyAnswerStruct struct {
-	Word         string   `json:"word"`         // `xlsx:wd`
-	Define       []string `json:"define"`       // `xlsx:def`
-	SerialNumber int      `json:"serialNumber"` // `xlsx:sn`
-	QueryCounter int      `json:"queryCounter"` // `xlsx:qc`
-	QueryTime    string   `json:"queryTime"`    // `xlsx:qt`
-	Note         []string `json:"note"`         // `xlsx:nt`
-	SourceName   string   `json:"sourceName"`
-	Type         int      `json:"type"`
-	Status       string   `json:"status"`
-	Location     struct {
-		TableIndex int `json:"tableIndex"`
-		ItemIndex  int `json:"itemIndex"`
-	} `json:"location"`
-}
-
 const (
+	Basic = "basic"
+	Advance = "advance"
 	Collection = 1
 	Dictionary = 2
 	Online = 3
-	Basic = "basic"
-	Advance = "advance"
 )
+
+type VocabularyAnswerStruct struct {
+	Word         string         `json:"word"`         // `xlsx:wd`
+	Definition   []string       `json:"definition"`   // `xlsx:def`
+	SerialNumber int            `json:"serialNumber"` // `xlsx:sn`
+	QueryCounter int            `json:"queryCounter"` // `xlsx:qc`
+	QueryTime    string         `json:"queryTime"`    // `xlsx:qt`
+	Note         []string       `json:"note"`         // `xlsx:nt`
+	SourceName   string         `json:"sourceName"`
+	Status       string         `json:"status"`
+	Location     LocationStruct `json:"location"`
+}
+
+type LocationStruct struct {
+	TableType  int `json:"tableType"`
+	TableIndex int `json:"tableIndex"`
+	ItemIndex  int `json:"itemIndex"`
+}
 ```
 
 This is the data structure of the *vocabulary*.
@@ -91,9 +93,9 @@ This is the data structure of the *vocabulary*.
 
 `Word` indicates the word in the *vocabulary*.
 
-#### 4.2. Define
+#### 4.2. Definition
 
-`Define` indicates definitions in the *vocabulary*.
+`Definition` indicates definitions in the *vocabulary*.
 
 #### 4.3. SerialNumber
 
@@ -119,13 +121,7 @@ This is the data structure of the *vocabulary*.
 - the *dictionary*
 - the *service*
 
-#### 4.8. Type
-
-- If the *vocabulary* comes from the *collection*, its `Type` will be `Collection`.
-- If the *vocabulary* comes from the *dictionary*, its `Type` will be `Dictionary`.
-- If the *vocabulary* comes from the *service*, its `Type` will be `Online`.
-
-#### 4.9. Status
+#### 4.8. Status
 
 `Status` indicates some other information.
 
@@ -136,13 +132,17 @@ If the *vocabulary* comes from the *collection* or the *dictionary*:
 
 If the *vocabulary* comes from the *service*, its `Status` will be `Basic`.
 
-#### 4.10. Location
+#### 4.9. Location
 
 `Location` is used to locate the *vocabulary* in *collections* or *dictionaries*.
 
 It is a structure and has got these members:
 
-- `TableIndex` indicates the index of the *collection* or the *dictionary* (depends on `Type`) which the *vocabulary* belongs to in the list.
+- `TableType` indicates the source of the *vocabulary*.
+  - If the *vocabulary* comes from the *collection*, it will be `Collection`.
+  - If the *vocabulary* comes from the *dictionary*, it will be `Dictionary`.
+  - If the *vocabulary* comes from the *service*, it will be `Online`.
+- `TableIndex` indicates the index of the *collection* or the *dictionary* (depends on `TableType`) which the *vocabulary* belongs to in the list.
 - `ItemIndex` indicates the *vocabulary's* index in the *collection* or the *dictionary*.
 
 **These indexes begin with 0.**
@@ -151,39 +151,25 @@ It is a structure and has got these members:
 
 ```go
 type VocabularyEditStruct struct {
-	TableType int `json:"tableType"`
-	Location  struct {
-		TableIndex int `json:"tableIndex"`
-		ItemIndex  int `json:"itemIndex"`
-	} `json:"location"`
-	ContentType int    `json:"contentType"`
-	Content     string `json:"content"`
+	Location   LocationStruct `json:"location"`
+	Definition string         `json:"definition"`
+	Note       string         `json:"note"`
 }
-
-const (
-	Define = -1
-	Note = -2
-)
 ```
 
 This structure is used to provide information for editting a *vocabulary* in *collection* or *dictionary*.
 
-#### 5.1. TableType
+#### 5.1. Location
 
-`TableType` is same as `Type` in \#4.8.
+`Location` is same as \#4.9.
 
-#### 5.2. Location
+#### 5.2. Definition
 
-`Location` is same as \#4.10.
+`Definition` indicates amended definitions.
 
-#### 5.3. ContentType
+#### 5.3. Note
 
-- To edit `Define` of the *vocabulary*, `ContentType` should be set as `Define`.
-- To edit `Note` of the *vocabulary*, `ContentType` should be set as `Note`.
-
-#### 5.4. Content
-
-`Content` is the new string to be set.
+`Note` indicates amended notes.
 
 ### 6. Others
 

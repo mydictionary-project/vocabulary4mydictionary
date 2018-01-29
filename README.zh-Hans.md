@@ -147,7 +147,20 @@ type LocationStruct struct {
 
 **上述索引从0开始。**
 
-### 5. VocabularyEditStruct
+### 5. VocabularyResultStruct
+
+```go
+type VocabularyResultStruct struct {
+	Basic   []vocabulary4mydictionary.VocabularyAnswerStruct `json:"basic"`
+	Advance []vocabulary4mydictionary.VocabularyAnswerStruct `json:"advance"`
+}
+```
+
+`Basic`由来自*基本查询*的*词条*构成。
+
+`Advance`由来自*高级查询*的*词条*构成。
+
+### 6. VocabularyEditStruct
 
 ```go
 type VocabularyEditStruct struct {
@@ -159,19 +172,19 @@ type VocabularyEditStruct struct {
 
 这个结构体给出一些信息，以便编辑*生词本*或*离线词典*中*词条*。
 
-#### 5.1. Location
+#### 6.1. Location
 
 `Location`与\#4.9中的相同。
 
-#### 5.2. Definition
+#### 6.2. Definition
 
 `Definition`指示了修改后的释义。
 
-#### 5.3. Note
+#### 6.3. Note
 
 `Note`指示了修改后的笔记。
 
-### 6. 其他
+### 7. 其他
 
 - 所以代码文件是用[Atom](https://atom.io/)编写的。
 - 所有".md"文件是用[Typora](http://typora.io)编写的。

@@ -147,7 +147,20 @@ It is a structure and has got these members:
 
 **These indexes begin with 0.**
 
-### 5. VocabularyEditStruct
+### 5. VocabularyResultStruct
+
+```go
+type VocabularyResultStruct struct {
+	Basic   []vocabulary4mydictionary.VocabularyAnswerStruct `json:"basic"`
+	Advance []vocabulary4mydictionary.VocabularyAnswerStruct `json:"advance"`
+}
+```
+
+`Basic` is made up by *vocabularies* come from *basic query*.
+
+`Advance` is made up by *vocabularies* come from *advanced query*.
+
+### 6. VocabularyEditStruct
 
 ```go
 type VocabularyEditStruct struct {
@@ -159,19 +172,19 @@ type VocabularyEditStruct struct {
 
 This structure is used to provide information for editting a *vocabulary* in *collection* or *dictionary*.
 
-#### 5.1. Location
+#### 6.1. Location
 
 `Location` is same as \#4.9.
 
-#### 5.2. Definition
+#### 6.2. Definition
 
 `Definition` indicates amended definitions.
 
-#### 5.3. Note
+#### 6.3. Note
 
 `Note` indicates amended notes.
 
-### 6. Others
+### 7. Others
 
 - All code files are edited by [Atom](https://atom.io/).
 - All ".md" files are edited by [Typora](http://typora.io).

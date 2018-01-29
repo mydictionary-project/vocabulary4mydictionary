@@ -34,6 +34,12 @@ type VocabularyAnswerStruct struct {
 	Location     LocationStruct `json:"location"`
 }
 
+// VocabularyResultStruct : set of query result
+type VocabularyResultStruct struct {
+	Basic   []VocabularyAnswerStruct `json:"basic"`
+	Advance []VocabularyAnswerStruct `json:"advance"`
+}
+
 // VocabularyEditStruct : editor for definition and note of vocabulary
 type VocabularyEditStruct struct {
 	Location   LocationStruct `json:"location"`

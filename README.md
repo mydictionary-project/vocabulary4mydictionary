@@ -20,7 +20,7 @@ For example, in *basic query*, input word "cat" and data of the line 1 will be s
 
 #### 2.2. Advanced Query (Keyword Match)
 
-If the word **is contained by the content in cells at columns "Word", "Define" or "Note" in a line**, the line will be selected.
+If the word **is contained by the content in cells at columns "Word", "Definition" or "Note" in a line**, the line will be selected.
 
 For example, in *advanced query*, input word "e" and the data of line 1, 3 and 5 will be selected.
 

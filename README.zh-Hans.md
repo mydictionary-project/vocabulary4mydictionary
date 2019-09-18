@@ -2,6 +2,8 @@
 
 [English Version](./README.md)
 
+> 这个仓库是 MYDICTIONARY （版本 <= v3.0.0）的一个依赖。
+
 ### 1. 简介
 
 这个仓库定义了一些[MYDICTIONARY](https://github.com/zzc-tongji/mydictionary/blob/master/README.zh-Hans.md)（简称“核心库”）的基本数据结构。

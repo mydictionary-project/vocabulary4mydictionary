@@ -2,6 +2,8 @@
 
 [简体中文版](./README.zh-Hans.md)
 
+> The repo is a dependency of MYDICTIONARY which version is <= v3.0.0.
+
 ### 1. Introduction
 
 The repository defines some basic data structures of [MYDICTIONARY](https://github.com/zzc-tongji/mydictionary) ("the core library" for short).
